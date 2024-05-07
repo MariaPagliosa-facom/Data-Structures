@@ -7,7 +7,8 @@ createCities()
 {
     auto cities = new Cities;
 
-    cities->data = new City[cities->count = maxCityCount];
+    cities->data = new City[maxCityCount];
+    cities->capacity = cities->count = maxCityCount;
     return cities;
 }
 
@@ -57,7 +58,14 @@ void
 printCity(const City& city)
 {
     printf("IBGE code: %d\n"
-        "Name: %s %f %f %d %d %d %d %s\n",
+        "Name: %s\n"
+        "Latitude: %f\n"
+        "Longitude: %f\n"
+        "Capital: %d\n"
+        "State code : %d\n"
+        "Siafi id: %d\n"
+        "DDD: %d\n"
+        "Time zone: %s\n",
         city.ibge_code,
         city.city_name,
         city.latitude,

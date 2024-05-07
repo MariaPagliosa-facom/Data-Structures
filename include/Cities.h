@@ -21,6 +21,7 @@ struct City
 struct Cities
 {
     City* data;
+    int capacity;
     int count;
     
 }; // Cities
