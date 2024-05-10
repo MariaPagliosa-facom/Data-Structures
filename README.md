@@ -6,4 +6,5 @@ Instructions to build and run T1 in Linux:
 2. Go to directory __build__
 3. Run the script file __build.sh__
 4. Run the script file __run.sh__
- _Obs: if you couldn't run a script, try to change its access: __chmod 755 <filename>___ 
+
+_Obs: if you couldn't run a script, try to change its access: __chmod 755 <filename>___ 
