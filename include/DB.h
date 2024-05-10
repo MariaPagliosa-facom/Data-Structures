@@ -1,3 +1,9 @@
+// DESCRIPTION: DB.h
+// Type defintions and function headers for database
+//
+// Author: Maria Luiza Pagliosa
+// Last revision: 10/05/2024
+
 #ifndef __DB_H
 #define __DB_H
 

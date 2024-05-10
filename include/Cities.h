@@ -1,3 +1,9 @@
+// DESCRIPTION: Cities.h
+// Type defintions and function headers for City and collections
+//
+// Author: Maria Luiza Pagliosa
+// Last revision: 10/05/2024
+
 #ifndef __CITIES_H
 #define __CITIES_H
 

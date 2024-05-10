@@ -1,3 +1,9 @@
+// DESCRIPTION: AABB.h
+// Type defintions and function headers for Point2 and Box2
+//
+// Author: Maria Luiza Pagliosa
+// Last revision: 10/05/2024
+
 #ifndef __Box2_H
 #define __Box2_H
 

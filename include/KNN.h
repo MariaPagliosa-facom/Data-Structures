@@ -1,3 +1,9 @@
+// DESCRIPTION: KNN.h
+// Type defintions and function headers for cities KNN
+//
+// Author: Maria Luiza Pagliosa
+// Last revision: 10/05/2024
+
 #ifndef __KNN_h
 #define __KNN_h
 

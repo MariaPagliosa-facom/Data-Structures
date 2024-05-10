@@ -1,3 +1,9 @@
+// DESCRIPTION: KDTree.h
+// Type defintions and function headers for cities KD-tree
+//
+// Author: Maria Luiza Pagliosa
+// Last revision: 10/05/2024
+
 #ifndef __KDTREE_H
 #define __KDTREE_H
 
