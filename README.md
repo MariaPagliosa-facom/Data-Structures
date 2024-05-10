@@ -1,5 +1,5 @@
 # Data-Structures
-Code for Data Structures Course
+##Code for Data Structures Course
 
 Instructions to build and run T1 in Linux:
 1. Download all
