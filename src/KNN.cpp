@@ -1,3 +1,9 @@
+// DESCRIPTION: Cities.cpp
+// Source code for KNN
+//
+// Author: Maria Luiza Pagliosa
+// Last revision: 10/05/2024
+
 #include <KNN.h>
 
 inline bool

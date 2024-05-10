@@ -1,3 +1,9 @@
+// DESCRIPTION: Cities.cpp
+// Source code for KDTree
+//
+// Author: Maria Luiza Pagliosa
+// Last revision: 10/05/2024
+
 #include "KDTree.h"
 #include <cassert>
 #include <cstdio>

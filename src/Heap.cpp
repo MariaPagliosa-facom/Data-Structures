@@ -1,3 +1,9 @@
+// DESCRIPTION: Cities.cpp
+// Source code for Heap
+//
+// Author: Maria Luiza Pagliosa
+// Last revision: 10/05/2024
+
 #include "Cities.h"
 #include "DB.h"
 
