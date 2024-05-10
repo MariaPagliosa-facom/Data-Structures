@@ -1,4 +1,4 @@
-// DESCRIPTION: Cities.cpp
+// DESCRIPTION: KNN.cpp
 // Source code for KNN
 //
 // Author: Maria Luiza Pagliosa

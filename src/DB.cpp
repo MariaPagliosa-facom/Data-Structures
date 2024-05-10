@@ -1,4 +1,4 @@
-// DESCRIPTION: Cities.cpp
+// DESCRIPTION: DB.cpp
 // Source code for database
 //
 // Author: Maria Luiza Pagliosa

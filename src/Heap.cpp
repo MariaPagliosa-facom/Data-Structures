@@ -1,4 +1,4 @@
-// DESCRIPTION: Cities.cpp
+// DESCRIPTION: Heap.cpp
 // Source code for Heap
 //
 // Author: Maria Luiza Pagliosa

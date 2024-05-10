@@ -1,4 +1,4 @@
-// DESCRIPTION: Cities.cpp
+// DESCRIPTION: KDTree.cpp
 // Source code for KDTree
 //
 // Author: Maria Luiza Pagliosa
