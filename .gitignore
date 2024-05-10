@@ -30,3 +30,14 @@
 *.exe
 *.out
 *.app
+
+# VS stuff
+*.vcxproj.user
+*.VC.db
+*.ilk
+*.idb
+*.pdb
+*.suo
+*.log
+*.tlog
+*.vsidx
