@@ -1,7 +1,7 @@
 # Data-Structures
 ## Code for Data Structures Course
 
-Instructions to build and run T1 in Linux:
+Instructions to build and run T2 in Linux:
 1. Download all
 2. Go to directory __build__
 3. Run the script file __build.sh__
