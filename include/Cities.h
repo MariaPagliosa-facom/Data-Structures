@@ -49,7 +49,8 @@ deleteCities(Cities*& cities)
 }
 
 extern Cities* readCitiesFromCSV(const char* filename);
-extern void printCity(const City& city, bool shortPrint = false);
+extern void printCity(const City& city, void* = nullptr);
+extern void printCity(const City& city, bool shortPrint);
 extern void printCities(const Cities* cities, int maxCount = 0);
 
 // Array of City pointers

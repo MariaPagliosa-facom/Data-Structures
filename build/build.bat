@@ -1,1 +1,1 @@
-cl /std:c++20 /I"..\include" ..\src\*.cpp ..\Main.cpp /Fe"T1"
+cl /std:c++20 /I"..\include" ..\src\*.cpp ..\Main.cpp /Fe"T2"

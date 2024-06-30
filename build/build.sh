@@ -1,1 +1,1 @@
-g++ -std=c++20 -I ../include/ ../src/*.cpp ../Main.cpp -o T1
+g++ -std=c++20 -I ../include/ ../src/*.cpp ../Main.cpp -o T2

@@ -2,7 +2,7 @@
 // Source code for database
 //
 // Author: Maria Luiza Pagliosa
-// Last revision: 10/05/2024
+// Last revision: 09/06/2024
 
 #include "DB.h"
 #include <cstring>
@@ -102,7 +102,8 @@ createDB(Cities* cities)
     insertCity1(db->hash1, city);
     insertCity2(db->hash2, city);
   }
-  db->tree = createKDTree(cities);
+  db->kdt = createKDTree(cities);
+  db->rt = createRangeTree(cities);
   return db;
 }
 

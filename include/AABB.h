@@ -83,7 +83,7 @@ split(const Box2& box, float x, int axis, Box2& b1, Box2& b2)
 
 inline auto
 max(float a, float b, float c)
-{             
+{
   auto x = a > b ? a : b;
   return x > c ? x : c;
 }

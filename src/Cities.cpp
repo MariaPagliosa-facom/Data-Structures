@@ -61,15 +61,10 @@ readCitiesFromCSV(const char* filename)
 }
 
 void
-printCity(const City& city, bool shortPrint)
+printCity(const City& city, void*)
 {
-  printf("IBGE code: %d\n", city.ibge_code);
-  if (shortPrint)
-  {
-    putchar('\n');
-    return;
-  }
-  printf("Name: %s\n"
+  printf("IBGE code: %d\n"
+    "Name: % s\n"
     "Latitude: %f\n"
     "Longitude: %f\n"
     "Capital: %d\n"
@@ -77,6 +72,7 @@ printCity(const City& city, bool shortPrint)
     "Siafi id: %d\n"
     "DDD: %d\n"
     "Time zone: %s\n\n",
+    city.ibge_code,
     city.city_name,
     city.latitude,
     city.longitude,
@@ -85,6 +81,15 @@ printCity(const City& city, bool shortPrint)
     city.siafi_id,
     city.ddd,
     city.time_zone);
+}
+
+void
+printCity(const City& city, bool shortPrint)
+{
+  if (shortPrint)
+    printf("IBGE code: %d\n\n", city.ibge_code);
+  else
+    printCity(city);
 }
 
 void

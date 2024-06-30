@@ -1,9 +1,12 @@
 #include "DB.h"
+#include "Tests.h"
+#include <cmath>
+#include <cstdarg>
 #include <cstdio>
 #include <cstdlib>
 #include <cstring>
 
-bool
+inline bool
 stoi(const char* s, int& value)
 {
   char* end = nullptr;
@@ -13,11 +16,15 @@ stoi(const char* s, int& value)
 }
 
 int
-readInt(const char* prompt)
+readInt(const char* fmt, ...)
 {
   constexpr auto maxInputSize = 80;
   char input[maxInputSize];
+  char prompt[maxInputSize];
+  va_list args;
 
+  va_start(args, fmt);
+  vsnprintf(prompt, maxInputSize, fmt, args);
   for (;;)
   {
     printf("%s: ", prompt);
@@ -30,6 +37,40 @@ readInt(const char* prompt)
     if (stoi(input, value))
       return value;
     puts("Integer expected! Try again");
+  }
+}
+
+inline bool
+stof(const char* s, float& value)
+{
+  char* end = nullptr;
+  auto x = strtof(s, &end);
+
+  return *end == 0 || *end == '\n' ? (value = x), true : false;
+}
+
+float
+readFloat(const char* fmt, ...)
+{
+  constexpr auto maxInputSize = 80;
+  char input[maxInputSize];
+  char prompt[maxInputSize];
+  va_list args;
+
+  va_start(args, fmt);
+  vsnprintf(prompt, maxInputSize, fmt, args);
+  for (;;)
+  {
+    printf("%s: ", prompt);
+    fgets(input, maxInputSize, stdin);
+    if (*input == '\n')
+      return NAN;
+
+    float value;
+
+    if (stof(input, value))
+      return value;
+    puts("Float expected! Try again");
   }
 }
 
@@ -54,7 +95,7 @@ printKNN(const DB* db, const City* city, bool shortPrint = false)
     if (k > 0 && k <= maxNeighbors)
     {
       auto p = location(*city);
-      auto knn = findKNN(db->tree, p, k + 1);
+      auto knn = findKNN(db->kdt, p, k + 1);
 
       printf("\n%d nearest neighbors of %s:\n", knn.count - 1, city->city_name);
       for (int i = 0; i < knn.count; i++)
@@ -80,13 +121,13 @@ printKNN(const DB* db, int ibge_code, bool shortPrint = false)
 }
 
 const char*
-readCityName()
+readCityName(const char* label = "")
 {
   constexpr auto maxInputSize = 80;
   // global lifetime, local visibility
   static char input[maxInputSize];
 
-  printf("Enter a city name: ");
+  printf("Enter a city name%s: ", label);
   fgets(input, maxInputSize, stdin);
   if (*input == '\n')
     return nullptr;
@@ -139,6 +180,133 @@ readIbgeCode()
   return readInt("Enter a city IBGE code (must be an integer)");
 }
 
+inline void
+printRangeQuery(const DB* db, const Range range[])
+{
+  puts("**Range query result**");
+  if (auto out = rangeQuery(db->rt, range))
+  {
+    iterate(out, printCity);
+    deleteAVLTree(out);
+  }
+  else
+    puts("Empty!");
+}
+
+void
+setNameRange(Range& range)
+{
+  constexpr auto maxNameSize = 40;
+  static char  min[maxNameSize];
+
+  strncpy(min, readCityName(" (min)"), maxNameSize);
+  if (*min == 0)
+  {
+    range.minKey = nullptr;
+    return;
+  }
+  range.minKey = min;
+  range.maxKey = readCityName(" (max)");
+  if (range.maxKey == nullptr)
+    range.maxKey = range.minKey;
+}
+
+void
+setIntRange(const char* label, Range& range)
+{
+  auto min = readInt("Enter %s (min)", label);
+
+  if (min == -1)
+  {
+    range.minKey = nullptr;
+    return;
+  }
+  range.minKey = toVoidPtr(min);
+
+  auto max = readInt("Enter %s (max)", label);
+
+  range.maxKey = max == -1 ? range.minKey : toVoidPtr(max);
+}
+
+void
+setFloatRange(const char* label, Range& range)
+{
+  auto min = readFloat("Enter %s (min)", label);
+
+  if (isnan(min))
+  {
+    range.minKey = nullptr;
+    return;
+  }
+  range.minKey = toVoidPtr(min);
+
+  auto max = readFloat("Enter %s (max)", label);
+
+  range.maxKey = isnan(max) ? range.minKey : toVoidPtr(max);
+}
+
+void
+rangeQueryInterface(const DB* db)
+{
+  Range ranges[]
+  {
+    {nullptr, nullptr}, // NAME
+    {nullptr, nullptr}, // LATITUDE
+    {nullptr, nullptr}, // LONGITUDE
+    {nullptr, nullptr}, // STATE_CODE
+    {nullptr, nullptr}  // DDD
+  };
+
+  for (;;)
+  {
+    printf("RANGE QUERY MENU\n"
+      "[1] Set City Name Range\n"
+      "[2] Set Latitude Range\n"
+      "[3] Set Longitude Range\n"
+      "[4] Set State Code Range\n"
+      "[5] Set DDD Range\n"
+      "[6] Run Query\n"
+      "[7] Return to Main Manu\n"
+      "Enter an option: ");
+
+    constexpr auto maxInputSize = 80;
+    char input[maxInputSize];
+    char op{};
+
+    fgets(input, maxInputSize, stdin);
+    if (input[0] == '\n')
+      continue;
+    if (input[1] == '\n')
+      op = *input;
+    switch (op)
+    {
+      case '1':
+        setNameRange(ranges[NAME]);
+        break;
+      case '2':
+        setFloatRange("Latitude", ranges[LATITUDE]);
+        break;
+      case '3':
+        setFloatRange("Longitude", ranges[LONGITUDE]);
+        break;
+      case '4':
+        setIntRange("State Code", ranges[STATE_CODE]);
+        break;
+      case '5':
+        setIntRange("DDD", ranges[DDD]);
+        break;
+      case '6':
+        printRangeQuery(db, ranges);
+        [[fallthrough]];
+      case '7':
+        return;
+      default:
+        puts("Unknown option! Try again\n");
+        break;
+    }
+  }
+}
+
 void
 talktome(const DB* db)
 {
@@ -148,7 +316,8 @@ talktome(const DB* db)
       "[1] Get city info\n"
       "[2] Get neighbors' IBGE\n"
       "[3] Get neighbors' info\n"
-      "[4] Exit\n"
+      "[4] Range Query\n"
+      "[5] Exit\n"
       "Enter an option: ");
 
     constexpr auto maxInputSize = 80;
@@ -175,6 +344,9 @@ talktome(const DB* db)
           printKNN(db, city_name);
         break;
       case '4':
+        rangeQueryInterface(db);
+        break;
+      case '5':
         puts("Bye!");
         return;
       default:
@@ -184,61 +356,29 @@ talktome(const DB* db)
   }
 }
 
-inline void
-sortTest(Cities* cities)
-{
-  auto cptrs = createCityPtrs(cities);
-
-  sortCities(cptrs, 0, 10, 0);
-  sortCities(cptrs, 10, 5, 1);
-  for (int i = 0; i < 15; ++i)
-  {
-    printf("**City %d\n", i + 1);
-    printCity(*(cptrs.data[i]));
-  }
-  deleteCityPtrs(cptrs);
-}
-
-inline void
-boxTest()
-{
-  Box2 box;
-
-  box.min = Point2{2, 4};
-  box.max = Point2{7, 8};
-  printf("%f\n", distance(box, Point2{1, 6}));
-  printf("%f\n", distance(box, Point2{8, 6}));
-  printf("%f\n", distance(box, Point2{5, 9}));
-  printf("%f\n", distance(box, Point2{5, 1}));
-  printf("%f\n", distance(box, Point2{2, 5}));
-  printf("%f\n", distance(box, Point2{5, 4}));
-  printf("%f\n", distance(box, Point2{3, 5}));
-}
-
 int
 main(int argc, char** argv)
 {
   //boxTest();
   if (argc == 1)
   {
-    puts("Usage:\nTest <city_file>");
+    puts("Usage:\nT2 <city_file>");
     return 1;
   }
 
   auto cities = readCitiesFromCSV(argv[1]);
   auto db = createDB(cities);
 
-  printf("**DB created successfully!\n"
+  /*printf("**DB created successfully!\n"
     "Hash 1 collisions: %d\n"
     "Hash 2 collisions: %d\n"
     "KDTree nodes: %d (leafs: %d)\n\n",
     db->hash1.collisionCount,
     db->hash2.collisionCount,
     db->tree->nodeCount, db->tree->leafCount);
-
-  //sortTest(cities);
+  */
+  //testCities(cities);
   talktome(db);
-  //printCities(cities, 10);
   deleteDB(db);
   return 0;
 }
